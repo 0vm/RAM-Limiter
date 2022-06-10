@@ -2,6 +2,13 @@
 Limits Discord And Chromes Ram Usage (Selectable)
 
 
+# Video
+
+https://user-images.githubusercontent.com/79897291/172990167-0e113c2d-5edd-4ffa-9e06-8ac7cb1946ea.mp4
+
+
+
+
 # Cause
 This was made due to discord unnecessarily caching objects, this uses GC.Collect for garbage collection. Another cause to this was due to my laptop not having much ram and due to discord always using about 1.3GB of ram on my Gaming rig when i'm trying to play any ram intensive game.
 This eliminates the use of Razer Cortex™ and or many other softwares.
