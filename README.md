@@ -10,7 +10,7 @@ Oh yeah also because the original owner of this is no longer maintaining it and 
 
 # Use
 Frees up RAM that is being used by Discord and Chrome Automatically, This gives your device more available ram and less battery consumption.
-On startup you can choose between Chrome Or Discord Since those use the most ram for me personally.
+On Application startup you can choose between Chrome Or Discord Since those use the most ram for me personally.
 
 
 # Original
