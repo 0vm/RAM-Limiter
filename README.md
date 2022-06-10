@@ -1,4 +1,4 @@
-# Discord RAM Limiter
+# RAM Limiter
 Limits Discord And Chromes Ram Usage (Selectable)
 
 
@@ -18,4 +18,4 @@ No longer maintained, it used more CPU Than Discord Itself, Making it sacrifice 
 https://github.com/farajyeet/discord-ram-limiter
 
 # Tags
-Limits Discords Ram Usage, Limit google chromes ram usage, google chrome using too much ram, discord using too much ram, discord ram usage high, discord memory leak.
+Limit Discords Ram Usage, Limit google chromes ram usage, google chrome using too much ram, discord using too much ram, discord ram usage high, discord memory leak.
