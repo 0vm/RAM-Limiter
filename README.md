@@ -3,6 +3,7 @@ Limits Discord, Chromes And OBS' Ram Usage (Selectable)
 
 
 # Video
+![904d5aebc3af74f6218e1c30893ac6f6](https://user-images.githubusercontent.com/79897291/173233207-912f3cb1-bc42-45fa-9f81-36da025f58a4.gif)
 
 https://user-images.githubusercontent.com/79897291/172990167-0e113c2d-5edd-4ffa-9e06-8ac7cb1946ea.mp4
 
