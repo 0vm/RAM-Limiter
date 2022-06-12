@@ -1,5 +1,5 @@
 # RAM Limiter
-Limits Discord And Chromes Ram Usage (Selectable)
+Limits Discord, Chromes And OBS' Ram Usage (Selectable)
 
 
 # Video
