@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -43,6 +43,21 @@ namespace RAMLIMITER
                 }
             }
             return chromeId;
+        }
+
+        public static int GetOBS()
+        {
+            int OBSId = -1;
+            long workingSet2 = 0;
+            foreach (Process OBS in Process.GetProcessesByName("obs64"))
+            {
+                if (OBS.WorkingSet64 > workingSet2)
+                {
+                    workingSet2 = OBS.WorkingSet64;
+                    OBSId = OBS.Id;
+                }
+            }
+            return OBSId;
         }
 
         static void Both(int min, int max)
@@ -215,6 +230,44 @@ namespace RAMLIMITER
                     }
         }
 
+
+        static void OBSRamLimiter(int min, int max)
+        {
+            while (GetOBS() != -1)
+            {
+                if (GetOBS() != -1)
+                {
+                    GC.Collect();
+
+                    GC.WaitForPendingFinalizers();
+
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    {
+                        SetProcessWorkingSetSize(Process.GetProcessById(GetOBS()).Handle, min, max);
+                    }
+
+                    var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+
+                    var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new {
+                        FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
+                        TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
+                    }).FirstOrDefault();
+
+                    if (memoryValues != null)
+                    {
+
+
+                        var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("OBS: Total ram usage: {0}", percent);
+                        Thread.Sleep(5000);
+                    }
+
+                    Thread.Sleep(1);
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             new Thread(() => // taken from pinger, originally from zf9
@@ -255,7 +308,8 @@ namespace RAMLIMITER
             start:
             Console.WriteLine("Just Limit Discord: 1");
             Console.WriteLine("Just Limit Chrome: 2");
-            Console.WriteLine("Limit Both: 3");
+            Console.WriteLine("Just Limit OBS: 3");
+            Console.WriteLine("Limit Discord & Chrome: 4");
             ConsoleKey response = Console.ReadKey(true).Key;
             Console.WriteLine();
             if (response == ConsoleKey.D1)
@@ -269,6 +323,11 @@ namespace RAMLIMITER
                 ChromeRamLimiter(-1, -1);
             }
             else if (response == ConsoleKey.D3)
+            {
+                Console.Clear();
+                OBSRamLimiter(-1, -1);
+            }
+            else if (response == ConsoleKey.D4)
             {
                 Console.Clear();
                 Both(-1, -1);
