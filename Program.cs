@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,8 +10,12 @@ using System.Threading.Tasks;
 
 namespace RAMLIMITER
 {
+
     class Program
     {
+
+        public static string variableger = "Discord";
+
         [DllImport("kernel32.dll")]
         static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
 
@@ -45,6 +49,23 @@ namespace RAMLIMITER
             return chromeId;
         }
 
+        public static int GetCustom()
+        {
+            int OBSId = -1;
+            long workingSet2 = 0;
+            foreach (Process OBS in Process.GetProcessesByName(variableger))
+            {
+                if (OBS.WorkingSet64 > workingSet2)
+                {
+                    workingSet2 = OBS.WorkingSet64;
+                    OBSId = OBS.Id;
+                }
+            }
+            return OBSId;
+        }
+
+
+
         public static int GetOBS()
         {
             int OBSId = -1;
@@ -59,6 +80,7 @@ namespace RAMLIMITER
             }
             return OBSId;
         }
+
 
         static void Both(int min, int max)
         {
@@ -268,6 +290,49 @@ namespace RAMLIMITER
             }
         }
 
+
+        static void CustomRamLimiter(int min, int max)
+        {
+
+            Console.WriteLine("Type Process Name Like Chrome or OBS");
+            variableger = Console.ReadLine();
+
+            while (GetCustom() != -1)
+            {
+                if (GetCustom() != -1)
+                {
+                    GC.Collect();
+
+                    GC.WaitForPendingFinalizers();
+
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    {
+                        SetProcessWorkingSetSize(Process.GetProcessById(GetCustom()).Handle, min, max);
+                    }
+
+                    var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+
+                    var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new {
+                        FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
+                        TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
+                    }).FirstOrDefault();
+
+                    if (memoryValues != null)
+                    {
+
+
+                        var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine(variableger + ": Total ram usage: {0}", percent);
+                        Thread.Sleep(3000);
+                    }
+
+                    Thread.Sleep(1);
+                }
+            }
+        }
+
+
         static void Main(string[] args)
         {
             new Thread(() => // taken from pinger, originally from zf9
@@ -297,9 +362,9 @@ namespace RAMLIMITER
                     }
                     else if (randomNumber == 1)
                     {
-                        Console.Title = "https://github.com/0vm/Chrome-and-Discord-RAM-Limiter  " + s + " " + s + s + $"  | github.com/0vm";
+                        Console.Title = "https://github.com/0vm/RAM-Limiter  " + s + s + s + s + s + s + s + s + $"  | github.com/0vm";
                         Thread.Sleep(1500);
-                        Console.Title = "https://github.com/0vm/Chrome-and-Discord-RAM-Limiter  " + s + " " + s + s + $"  | github.com/0vm";
+                        Console.Title = "https://github.com/0vm/RAM-Limiter  " + s + s + s + s + s + s + s + s + $"  | github.com/0vm";
                         Thread.Sleep(1500);
                     }
                 }
@@ -310,6 +375,7 @@ namespace RAMLIMITER
             Console.WriteLine("Just Limit Chrome: 2");
             Console.WriteLine("Just Limit OBS: 3");
             Console.WriteLine("Limit Discord & Chrome: 4");
+            Console.WriteLine("Limit Custom: 5");
             ConsoleKey response = Console.ReadKey(true).Key;
             Console.WriteLine();
             if (response == ConsoleKey.D1)
@@ -332,6 +398,11 @@ namespace RAMLIMITER
                 Console.Clear();
                 Both(-1, -1);
             }
+            else if (response == ConsoleKey.D5)
+            {
+                Console.Clear();
+                CustomRamLimiter(-1, -1);
+            }
             else
             {
                 Console.Clear();
@@ -340,13 +411,6 @@ namespace RAMLIMITER
                 Thread.Sleep(2500);
                 goto start;
             }
-
-            
-
-
-
-            
-
 
             
         }
