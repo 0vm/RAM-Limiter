@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 
 namespace RAMLIMITER
 {
-
     class Program
     {
-
         public static string variableger = "Discord";
 
         [DllImport("kernel32.dll")]
         static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
 
+        // Method to get the process ID of Discord
         public static int GetDiscord()
         {
             int DiscordId = -1;
@@ -34,6 +33,7 @@ namespace RAMLIMITER
             return DiscordId;
         }
 
+        // Method to get the process ID of Chrome
         public static int GetChrome()
         {
             int chromeId = -1;
@@ -49,6 +49,7 @@ namespace RAMLIMITER
             return chromeId;
         }
 
+        // Method to get the process ID of a custom process
         public static int GetCustom()
         {
             int OBSId = -1;
@@ -64,8 +65,7 @@ namespace RAMLIMITER
             return OBSId;
         }
 
-
-
+        // Method to get the process ID of OBS
         public static int GetOBS()
         {
             int OBSId = -1;
@@ -81,7 +81,7 @@ namespace RAMLIMITER
             return OBSId;
         }
 
-
+        // Method to limit both Chrome and Discord
         static void Both(int min, int max)
         {
             new Thread(() =>
@@ -94,7 +94,6 @@ namespace RAMLIMITER
                         if (GetChrome() != -1)
                         {
                             GC.Collect();
-
                             GC.WaitForPendingFinalizers();
 
                             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -111,11 +110,9 @@ namespace RAMLIMITER
 
                             if (memoryValues != null)
                             {
-
-
                                 var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
                                 Console.ForegroundColor = ConsoleColor.Cyan;
-                                Console.WriteLine("CHROME: Total ram usage: {0}", percent);
+                                Console.WriteLine("CHROME: Total RAM usage: {0}", percent);
                                 Thread.Sleep(3000);
                             }
 
@@ -125,7 +122,6 @@ namespace RAMLIMITER
                 }
             }).Start();
             Thread.Sleep(5000);
-
 
             new Thread(() =>
             {
@@ -137,7 +133,6 @@ namespace RAMLIMITER
                         if (GetDiscord() != -1)
                         {
                             GC.Collect();
-
                             GC.WaitForPendingFinalizers();
 
                             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -155,11 +150,9 @@ namespace RAMLIMITER
 
                             if (memoryValues != null)
                             {
-
-
                                 var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
                                 Console.ForegroundColor = ConsoleColor.Cyan;
-                                Console.WriteLine("DISCORD: Total ram usage: {0}", percent);
+                                Console.WriteLine("DISCORD: Total RAM usage: {0}", percent);
                                 Thread.Sleep(3000);
                             }
 
@@ -170,13 +163,9 @@ namespace RAMLIMITER
 
             }).Start();
             Thread.Sleep(-1);
-
-
-
-
-
         }
 
+        // Method to limit Discord RAM usage
         static void DiscordRamLimiter(int min, int max)
         {
             while (GetDiscord() != -1)
@@ -184,7 +173,6 @@ namespace RAMLIMITER
                 if (GetDiscord() != -1)
                 {
                     GC.Collect();
-
                     GC.WaitForPendingFinalizers();
 
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -201,11 +189,9 @@ namespace RAMLIMITER
 
                     if (memoryValues != null)
                     {
-
-
                         var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("DISCORD: Total ram usage: {0}", percent);
+                        Console.WriteLine("DISCORD: Total RAM usage: {0}", percent);
                         Thread.Sleep(10000);
                     }
 
@@ -214,45 +200,42 @@ namespace RAMLIMITER
             }
         }
 
-
+        // Method to limit Chrome RAM usage
         static void ChromeRamLimiter(int min, int max)
         {
-                    while (GetChrome() != -1)
+            while (GetChrome() != -1)
+            {
+                if (GetChrome() != -1)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                     {
-                        if (GetChrome() != -1)
-                        {
-                            GC.Collect();
-
-                            GC.WaitForPendingFinalizers();
-
-                            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                            {
-                                SetProcessWorkingSetSize(Process.GetProcessById(GetChrome()).Handle, min, max);
-                            }
-
-                            var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
-
-                            var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new {
-                                FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
-                                TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
-                            }).FirstOrDefault();
-
-                            if (memoryValues != null)
-                            {
-
-
-                                var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
-                                Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("CHROME: Total ram usage: {0}", percent);
-                        Thread.Sleep(5000);
-                            }
-
-                            Thread.Sleep(1);
-                        }
+                        SetProcessWorkingSetSize(Process.GetProcessById(GetChrome()).Handle, min, max);
                     }
+
+                    var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+
+                    var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new {
+                        FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
+                        TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
+                    }).FirstOrDefault();
+
+                    if (memoryValues != null)
+                    {
+                        var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("CHROME: Total RAM usage: {0}", percent);
+                        Thread.Sleep(5000);
+                    }
+
+                    Thread.Sleep(1);
+                }
+            }
         }
 
-
+        // Method to limit OBS RAM usage
         static void OBSRamLimiter(int min, int max)
         {
             while (GetOBS() != -1)
@@ -260,7 +243,6 @@ namespace RAMLIMITER
                 if (GetOBS() != -1)
                 {
                     GC.Collect();
-
                     GC.WaitForPendingFinalizers();
 
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -277,11 +259,9 @@ namespace RAMLIMITER
 
                     if (memoryValues != null)
                     {
-
-
                         var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("OBS: Total ram usage: {0}", percent);
+                        Console.WriteLine("OBS: Total RAM usage: {0}", percent);
                         Thread.Sleep(5000);
                     }
 
@@ -290,10 +270,9 @@ namespace RAMLIMITER
             }
         }
 
-
+        // Method to limit RAM usage of a custom process
         static void CustomRamLimiter(int min, int max)
         {
-
             Console.WriteLine("Type Process Name Like Chrome or OBS");
             variableger = Console.ReadLine();
 
@@ -302,7 +281,6 @@ namespace RAMLIMITER
                 if (GetCustom() != -1)
                 {
                     GC.Collect();
-
                     GC.WaitForPendingFinalizers();
 
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -319,11 +297,9 @@ namespace RAMLIMITER
 
                     if (memoryValues != null)
                     {
-
-
                         var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine(variableger + ": Total ram usage: {0}", percent);
+                        Console.WriteLine(variableger + ": Total RAM usage: {0}", percent);
                         Thread.Sleep(3000);
                     }
 
@@ -332,14 +308,11 @@ namespace RAMLIMITER
             }
         }
 
-
         static void Main(string[] args)
         {
             new Thread(() => // taken from pinger, originally from zf9
             {
-
                 var s = "        "; // 8 spaces for the titles spacing, looks very messy but who cares.
-
                 Thread.CurrentThread.IsBackground = true;
                 for (int i = 0; i < int.MaxValue; i++)
                 {
@@ -370,7 +343,8 @@ namespace RAMLIMITER
                 }
                 Thread.Sleep(-1);
             }).Start();
-            start:
+
+        start:
             Console.WriteLine("Just Limit Discord: 1");
             Console.WriteLine("Just Limit Chrome: 2");
             Console.WriteLine("Just Limit OBS: 3");
@@ -411,8 +385,6 @@ namespace RAMLIMITER
                 Thread.Sleep(2500);
                 goto start;
             }
-
-            
         }
     }
 }
