@@ -1,31 +1,47 @@
 # RAM Limiter
-Limits Any Applications RAM Usage via Garbage Collection.
 
+RAM Limiter is a utility designed to optimise the RAM usage of any application through the process of Garbage Collection (GC).
 
-# Video
-![904d5aebc3af74f6218e1c30893ac6f6](https://user-images.githubusercontent.com/79897291/173233207-912f3cb1-bc42-45fa-9f81-36da025f58a4.gif)
+## Overview
 
+![RAM Limiter Demonstration](https://user-images.githubusercontent.com/79897291/173233207-912f3cb1-bc42-45fa-9f81-36da025f58a4.gif)
 https://user-images.githubusercontent.com/79897291/172990167-0e113c2d-5edd-4ffa-9e06-8ac7cb1946ea.mp4
 
+RAM Limiter was developed to address the challenge of applications, like Discord, that tend to cache objects unnecessarily, leading to high RAM usage. It leverages the `GC.Collect` method for efficient garbage collection, thereby freeing up the memory that these applications consume.
+
+This tool proves particularly useful for systems with limited RAM, where applications like Discord could use up to 1.3GB. By releasing these resources, it allows RAM-intensive games and other applications to run more smoothly.
+
+The RAM Limiter is a standalone solution that eliminates the need for other software like Razer Cortex™. Moreover, it provides an updated and maintained alternative to the original version of this tool, which is no longer supported and has been outdated for over a year.
+
+## Usage
+
+RAM Limiter works by automatically freeing up the RAM that is being used by any application. This not only provides your device with more available memory but also results in less battery consumption.
+
+Upon launching the application, you can choose the application you want to optimise - Chrome, Discord, or OBS. These are the applications that are known to consume significant RAM resources, but the tool can be used with any application.
+
+## Original Version
+[The original version of this tool](https://github.com/farajyeet/discord-ram-limiter) is no longer maintained. It was found to consume more CPU resources than Discord itself, resulting in a trade-off between free CPU and free RAM. This not only led to increased power usage but also negated the purpose of freeing up RAM.
 
 
-
-# Cause
-This was made due to discord unnecessarily caching objects, this uses GC.Collect for garbage collection. Another cause to this was due to my laptop not having much ram and due to discord always using about 1.3GB of ram on my Gaming rig when i'm trying to play any ram intensive game.
-This eliminates the use of Razer Cortex™ and or many other softwares.
-Oh yeah also because the original owner of this is no longer maintaining it and is outdated by over a year.
+Our version of the RAM Limiter improves upon the original by focusing on efficient memory management without overutilising the CPU. Some parts of the code were reused from the original repository and [our other project](https://github.com/0vm/Pinger).
 
 
-# Use
-Frees up RAM that is being used by Any Appilication Automatically, This gives your device more available ram and less battery consumption.
-On Application startup you can choose between Chrome, Discord or OBS Since those personally use the most ram for me.
+## Tags
 
-
-# Original
-No longer maintained, it used more CPU Than Discord Itself, Making it sacrifice free CPU for free RAM, In turn making it use more power.
-https://github.com/farajyeet/discord-ram-limiter
-Some parts of the code were reused from:
-https://github.com/0vm/Pinger
-
-# Tags
-Limit Discords Ram Usage, Limit google chromes ram usage, google chrome using too much ram, discord using too much ram, discord ram usage high, discord memory leak, OBS Memory leak, OBS Memory usage high, OBS RAM Usage, OBS RAM Leak.
+Limit RAM usage in Discord, 
+Limit RAM usage in Google Chrome, 
+Reduce RAM consumption in Google Chrome, 
+High RAM usage in Google Chrome, 
+Discord RAM management, 
+Reduce Discord's memory usage, 
+Discord RAM optimization, 
+Discord RAM optimisation, 
+Memory leak in Discord, 
+High RAM usage in Discord, 
+OBS RAM management, 
+Reduce OBS memory usage, 
+OBS RAM optimization, 
+OBS RAM optimisation, 
+OBS memory leak troubleshooting, 
+High RAM usage in OBS, 
+Limit OBS RAM usage
