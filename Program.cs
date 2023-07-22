@@ -4,9 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace RAMLIMITER
 {
@@ -16,6 +14,61 @@ namespace RAMLIMITER
 
         [DllImport("kernel32.dll")]
         static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
+
+        // Method to get all processes matching the custom process name
+        public static List<Process> GetCustom(string processName)
+        {
+            return Process.GetProcessesByName(processName).ToList();
+        }
+
+        // Method to limit RAM usage of multiple custom processes
+        static void CustomRamLimiter(int min, int max)
+        {
+            Console.WriteLine("Type Process Names Separated by Commas (e.g., chrome,obs,discord):");
+            string processNamesInput = Console.ReadLine();
+            List<string> processNames = processNamesInput.Split(',').Select(p => p.Trim().ToLower()).ToList();
+
+            List<Process> processesToLimit = new List<Process>();
+            foreach (var processName in processNames)
+            {
+                processesToLimit.AddRange(GetCustom(processName));
+            }
+
+            foreach (var process in processesToLimit)
+            {
+                new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    while (!process.HasExited)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                        {
+                            SetProcessWorkingSetSize(process.Handle, min, max);
+                        }
+
+                        var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+
+                        var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new
+                        {
+                            FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
+                            TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
+                        }).FirstOrDefault();
+
+                        if (memoryValues != null)
+                        {
+                            var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine(process.ProcessName + ": Total RAM usage: {0}", percent);
+                            Thread.Sleep(3000);
+                        }
+                    }
+                }).Start();
+            }
+
+            Thread.Sleep(-1);
+        }
 
         // Method to get the process ID of Discord
         public static int GetDiscord()
@@ -47,22 +100,6 @@ namespace RAMLIMITER
                 }
             }
             return chromeId;
-        }
-
-        // Method to get the process ID of a custom process
-        public static int GetCustom()
-        {
-            int OBSId = -1;
-            long workingSet2 = 0;
-            foreach (Process OBS in Process.GetProcessesByName(variableger))
-            {
-                if (OBS.WorkingSet64 > workingSet2)
-                {
-                    workingSet2 = OBS.WorkingSet64;
-                    OBSId = OBS.Id;
-                }
-            }
-            return OBSId;
         }
 
         // Method to get the process ID of OBS
@@ -263,44 +300,6 @@ namespace RAMLIMITER
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("OBS: Total RAM usage: {0}", percent);
                         Thread.Sleep(5000);
-                    }
-
-                    Thread.Sleep(1);
-                }
-            }
-        }
-
-        // Method to limit RAM usage of a custom process
-        static void CustomRamLimiter(int min, int max)
-        {
-            Console.WriteLine("Type Process Name Like Chrome or OBS");
-            variableger = Console.ReadLine();
-
-            while (GetCustom() != -1)
-            {
-                if (GetCustom() != -1)
-                {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                    {
-                        SetProcessWorkingSetSize(Process.GetProcessById(GetCustom()).Handle, min, max);
-                    }
-
-                    var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
-
-                    var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new {
-                        FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
-                        TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
-                    }).FirstOrDefault();
-
-                    if (memoryValues != null)
-                    {
-                        var percent = ((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100;
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine(variableger + ": Total RAM usage: {0}", percent);
-                        Thread.Sleep(3000);
                     }
 
                     Thread.Sleep(1);
