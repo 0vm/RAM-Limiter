@@ -19,8 +19,8 @@ RAM Limiter works by automatically freeing up the RAM that is being used by any 
 
 Upon launching the application, you can choose the application you want to optimise - Chrome, Discord, or OBS. These are the applications that are known to consume significant RAM resources, but the tool can be used with any application.
 
-## Original Version
-[The original version of this tool](https://github.com/farajyeet/discord-ram-limiter) is no longer maintained. It was found to consume more CPU resources than Discord itself, resulting in a trade-off between free CPU and free RAM. This not only led to increased power usage but also negated the purpose of freeing up RAM.
+## Inspiration
+[This Tool](https://github.com/farajyeet/discord-ram-limiter) is no longer maintained. It was found to consume more CPU resources than Discord itself, resulting in a trade-off between free CPU and free RAM. This not only led to increased power usage but also negated the purpose of freeing up RAM.
 
 
 Our version of the RAM Limiter improves upon the original by focusing on efficient memory management without overutilising the CPU. Some parts of the code were reused from the original repository and [our other project](https://github.com/0vm/Pinger).
