@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
@@ -21,13 +22,43 @@ namespace RAMLIMITER
             return Process.GetProcessesByName(processName).ToList();
         }
 
-        // Method to limit RAM usage of multiple custom processes
-        static void CustomRamLimiter(int min, int max)
+        // Method to limit RAM usage of multiple custom processes - modified by Hypn0tick
+        static void CustomRamLimiter(int min, int max, bool useConfig = false, string configFile = "RAMLimiter.ini")
         {
-            Console.WriteLine("Type Process Names Separated by Commas (e.g., chrome,obs,discord):");
-            string processNamesInput = Console.ReadLine();
-            List<string> processNames = processNamesInput.Split(',').Select(p => p.Trim().ToLower()).ToList();
-
+            List<string> processNames = null;
+            if (useConfig)
+            {
+            configInput:
+                if (configFile == null)
+                {
+                    Console.WriteLine("Input the name of a configuration file to be read:\nNOTE: This file should contain a list of processes to limit, with one name on each line.");
+                    configFile = Console.ReadLine();
+                }
+                string configDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+                Console.WriteLine(configDir + configFile);
+                if (File.Exists(configFile))
+                {
+                    var lines = File.ReadLines(configFile);
+                    string processNamesInput = null;
+                    foreach (var line in lines)
+                    {
+                        processNamesInput = line + "," + processNamesInput;
+                    }
+                    processNames = processNamesInput.Split(',').Select(p => p.Trim().ToLower()).ToList();
+                }
+                else
+                {
+                    Console.WriteLine("ERROR: Could not find the " + configFile + " configuration file.\n");
+                    configFile = null;
+                    goto configInput;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Type Process Names Separated by Commas (e.g., chrome,obs,discord):");
+                string processNamesInput = Console.ReadLine();
+                processNames = processNamesInput.Split(',').Select(p => p.Trim().ToLower()).ToList();
+            }
             List<Process> processesToLimit = new List<Process>();
             foreach (var processName in processNames)
             {
@@ -66,7 +97,6 @@ namespace RAMLIMITER
                     }
                 }).Start();
             }
-
             Thread.Sleep(-1);
         }
 
@@ -349,6 +379,7 @@ namespace RAMLIMITER
             Console.WriteLine("Just Limit OBS: 3");
             Console.WriteLine("Limit Discord & Chrome: 4");
             Console.WriteLine("Limit Custom: 5");
+            Console.WriteLine("Limit Custom (External List): 6");
             ConsoleKey response = Console.ReadKey(true).Key;
             Console.WriteLine();
             if (response == ConsoleKey.D1)
@@ -375,6 +406,11 @@ namespace RAMLIMITER
             {
                 Console.Clear();
                 CustomRamLimiter(-1, -1);
+            }
+            else if (response == ConsoleKey.D6)
+            {
+                Console.Clear();
+                CustomRamLimiter(-1, -1, true);
             }
             else
             {
