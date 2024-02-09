@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Threading;
 
 namespace RAMLIMITER
@@ -14,6 +16,45 @@ namespace RAMLIMITER
 
         [DllImport("kernel32.dll")]
         static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
+
+        // Method to get the program's permissions
+        static bool IsAdmin()
+        {
+            WindowsIdentity id = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(id);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        // Method to elevate the program's privileges
+        static void ElevatePrivileges(string args)
+        {
+            string argsString = string.Concat(args);
+            if (!IsAdmin())
+            {
+                ProcessStartInfo proc = new ProcessStartInfo();
+                proc.UseShellExecute = true;
+                proc.WorkingDirectory = Environment.CurrentDirectory;
+                proc.FileName = Assembly.GetEntryAssembly().CodeBase;
+                proc.Arguments = args;
+                proc.Verb = "runas";
+
+                Console.Clear();
+                Console.WriteLine("RAM Limiter does not currently have admin. privileges.\nDepending on the programs you wish to limit, admin. privileges may be required.\n\nWould you like to run RAM Limiter as admin.? (y/n)");
+                ConsoleKey adminResponse = Console.ReadKey(true).Key;
+                if (adminResponse == ConsoleKey.Y)
+                {
+                    try
+                    {
+                        Process.Start(proc);
+                        Environment.Exit(0);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Could not elevate program. \n\n" + ex.ToString());
+                    }
+                }
+            }
+        }
 
         // Method to get all processes matching the custom process name
         public static List<Process> GetCustom(string processName)
@@ -66,7 +107,6 @@ namespace RAMLIMITER
                     }
                 }).Start();
             }
-
             Thread.Sleep(-1);
         }
 
@@ -344,6 +384,9 @@ namespace RAMLIMITER
             }).Start();
 
         start:
+            string argsString = string.Concat(args);
+            ElevatePrivileges(argsString);
+            Console.Clear();
             Console.WriteLine("Just Limit Discord: 1");
             Console.WriteLine("Just Limit Chrome: 2");
             Console.WriteLine("Just Limit OBS: 3");
