@@ -344,6 +344,42 @@ namespace RAMLIMITER
             }).Start();
 
         start:
+            string argsString = string.Concat(args);
+            Console.Clear();
+            foreach (string arg in args)
+            {
+                if (arg == "-c" | arg == "-custom")
+                {
+                    CustomRamLimiter(-1, -1);
+                }
+                if (arg == "-discord")
+                {
+                    if (args.Contains("-chrome"))
+                    {
+                        Both(-1, -1);
+                    }
+                    else
+                    {
+                        DiscordRamLimiter(-1, -1);
+                    }
+                }
+                if (arg == "-chrome")
+                {
+                    if (args.Contains("-discord"))
+                    {
+                        Both(-1, -1);
+                    }
+                    else
+                    {
+                        ChromeRamLimiter(-1, -1);
+                    }
+                }
+                if (arg == "-obs")
+                {
+                    OBSRamLimiter(-1, -1);
+                }
+            }
+            Console.Clear();
             Console.WriteLine("Just Limit Discord: 1");
             Console.WriteLine("Just Limit Chrome: 2");
             Console.WriteLine("Just Limit OBS: 3");
