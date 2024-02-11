@@ -42,7 +42,8 @@ namespace RAMLIMITER
                     string processNamesInput = null;
                     foreach (var line in lines)
                     {
-                        processNamesInput = line + "," + processNamesInput;
+                        string output = Regex.Replace(line, "//.*", "");
+                        processNamesInput = output + "," + processNamesInput;
                     }
                     processNames = processNamesInput.Split(',').Select(p => p.Trim().ToLower()).ToList();
                 }
