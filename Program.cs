@@ -17,7 +17,7 @@ namespace RAMLIMITER
         [DllImport("kernel32.dll")]
         static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
 
-        // Method to check the program's current privileges - created by Hypn0tick
+        // Method to check the program's current privileges - created by Hypn0tick | github.com/Hypn0tick
         static bool IsAdmin()
         {
             WindowsIdentity id = WindowsIdentity.GetCurrent();
@@ -25,7 +25,7 @@ namespace RAMLIMITER
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        // Method to elevate the program's privileges if the user chooses to do so - created by Hypn0tick
+        // Method to elevate the program's privileges if the user chooses to do so - created by Hypn0tick | github.com/Hypn0tick
         static void ElevatePrivileges(string args)
         {
             string argsString = string.Concat(args);
