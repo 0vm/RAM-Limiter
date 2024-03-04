@@ -39,7 +39,7 @@ namespace RAMLIMITER
                 proc.Verb = "runas";
 
                 Console.Clear();
-                Console.WriteLine("RAM Limiter does not currently have admin. privileges.\nDepending on the programs you wish to limit, admin. privileges may be required.\n\nWould you like to run RAM Limiter as admin.? (y/n)");
+                Console.WriteLine("RAM Limiter does not currently have admin. privileges.\nDepending on the programs you wish to limit, admin. privileges may be required.\n\nWould you like to run RAM Limiter as admin? (y/n)");
                 ConsoleKey adminResponse = Console.ReadKey(true).Key;
                 if (adminResponse == ConsoleKey.Y)
                 {
