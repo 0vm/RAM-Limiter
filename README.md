@@ -27,6 +27,7 @@ Upon launching the application, you can choose the application you want to optim
 
 Our version of the RAM Limiter improves upon the original by focusing on efficient memory management without overutilising the CPU. Some parts of the code were reused from the original repository and [our other project](https://github.com/0vm/Pinger).
 
+Thank you to @luke-beep and @hypn0tick for contributing / feedback!
 
 ## Tags
 
