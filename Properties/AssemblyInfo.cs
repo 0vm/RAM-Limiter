@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("RAMLimiter")]
-[assembly: AssemblyCopyright("Copyright © 0vm 2022")]
+[assembly: AssemblyCopyright("Copyright © github.com/0vm 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
