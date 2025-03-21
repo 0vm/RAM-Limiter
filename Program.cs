@@ -387,46 +387,50 @@ namespace RAMLIMITER
             string argsString = string.Concat(args);
             ElevatePrivileges(argsString);
             Console.Clear();
-            Console.WriteLine("Just Limit Discord: 1");
-            Console.WriteLine("Just Limit Chrome: 2");
-            Console.WriteLine("Just Limit OBS: 3");
+            Console.WriteLine("Limit Discord: 1");
+            Console.WriteLine("Limit Chrome: 2");
+            Console.WriteLine("Limit OBS: 3");
             Console.WriteLine("Limit Discord & Chrome: 4");
             Console.WriteLine("Limit Custom: 5");
             ConsoleKey response = Console.ReadKey(true).Key;
             Console.WriteLine();
-            if (response == ConsoleKey.D1)
-            {
-                Console.Clear();
-                DiscordRamLimiter(-1, -1);
-            }
-            else if (response == ConsoleKey.D2)
-            {
-                Console.Clear();
-                ChromeRamLimiter(-1, -1);
-            }
-            else if (response == ConsoleKey.D3)
-            {
-                Console.Clear();
-                OBSRamLimiter(-1, -1);
-            }
-            else if (response == ConsoleKey.D4)
-            {
-                Console.Clear();
-                Both(-1, -1);
-            }
-            else if (response == ConsoleKey.D5)
-            {
-                Console.Clear();
-                CustomRamLimiter(-1, -1);
-            }
-            else
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Don't Use The Numpad, Use The Numbers At The Top Of Your Keyboard.");
-                Thread.Sleep(2500);
+			if (key == ConsoleKey.D1 || key == ConsoleKey.NumPad1)
+			{
+    			Console.Clear();
+    			DiscordRamLimiter(-1, -1);
+			}
+			else if (key == ConsoleKey.D2 || key == ConsoleKey.NumPad2)
+			{
+    			Console.Clear();
+    			ChromeRamLimiter(-1, -1);
+			}
+			else if (key == ConsoleKey.D3 || key == ConsoleKey.NumPad3)
+			{
+    			Console.Clear();
+    			OBSRamLimiter(-1, -1);
+			}
+			else if (key == ConsoleKey.D4 || key == ConsoleKey.NumPad4)
+			{
+    			Console.Clear();
+    			Both(-1, -1);
+			}
+			else if (key == ConsoleKey.D5 || key == ConsoleKey.NumPad5)
+			{
+    			Console.Clear();
+    			CustomRamLimiter(-1, -1);
+			}
+			else if (key == ConsoleKey.D0 || key == ConsoleKey.NumPad0)
+			{
+    			Environment.Exit(0);
+			}
+			else
+			{
+    			Console.Clear();
+    			Console.ForegroundColor = ConsoleColor.Red;
+    			Console.WriteLine("Invalid input.");
+    			Thread.Sleep(2500);
                 goto start;
-            }
+			}
         }
     }
 }
