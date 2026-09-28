@@ -25,7 +25,7 @@ The RAM Limiter is a standalone solution that eliminates the need for other soft
 
 ## Usage
 
-You can run RAM Limiter interactively (menu) or automate it with a CLI or config file.
+You can [run RAM Limiter](https://github.com/0vm/RAM-Limiter/releases/download/main/RAMLimiter.exe) interactively (menu) or automate it with a CLI or config file.
 
 Interactive mode:
 - Run the executable with no arguments and choose an option from the menu (Discord, Chrome, OBS, custom, etc.).
