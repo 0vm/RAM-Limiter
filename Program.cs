@@ -322,6 +322,7 @@ namespace RAMLIMITER
             runHeadless = false;
 
             string configPath = Path.Combine(Directory.GetCurrentDirectory(), "config.json");
+            bool intervalSet = false;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -342,7 +343,11 @@ namespace RAMLIMITER
                 }
                 if (string.Equals(a, "--interval", StringComparison.OrdinalIgnoreCase) && i + 1 < args.Length)
                 {
-                    if (int.TryParse(args[++i], out var ms)) cfg.IntervalMs = Math.Max(100, ms);
+                    if (int.TryParse(args[++i], out var ms))
+                    {
+                        cfg.IntervalMs = Math.Max(100, ms);
+                        intervalSet = true;
+                    }
                     continue;
                 }
                 if (string.Equals(a, "--autostart", StringComparison.OrdinalIgnoreCase))
@@ -357,8 +362,8 @@ namespace RAMLIMITER
                 // apply file values only when not provided by CLI (CLI already wrote into cfg.Processes/IntervalMs/AutoStart)
                 if ((cfg.Processes == null || cfg.Processes.Length == 0) && fileCfg.Processes != null)
                     cfg.Processes = fileCfg.Processes;
-                if (cfg.IntervalMs == 0 && fileCfg.IntervalMs != 0)
-                    cfg.IntervalMs = fileCfg.IntervalMs;
+                if (!intervalSet && fileCfg.IntervalMs > 0)
+                    cfg.IntervalMs = Math.Max(100, fileCfg.IntervalMs);
                 if (!cfg.AutoStart && fileCfg.AutoStart)
                     cfg.AutoStart = fileCfg.AutoStart;
             }
